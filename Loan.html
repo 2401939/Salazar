@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loan List Sheet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f0f2f5;
+    }
+    input {
+      margin: 5px;
+      padding: 8px;
+      width: 200px;
+    }
+    button {
+      padding: 8px 15px;
+      margin-left: 5px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #999;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #e8e8e8;
+    }
+    #errorMsg {
+      color: red;
+      display: none;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Summit Finance Corp</h2>
+
+  <input type="text" id="name" placeholder="Name">
+  <input type="number" id="loan" placeholder="Loan Amount" step="0.01">
+  <button id="saveBtn">Save</button>
+
+  <p id="errorMsg"></p>
+
+  <table id="loanTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Loan Amount (₱)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Entries will go here -->
+    </tbody>
+  </table>
+
+  <script>
+    const saveButton = document.getElementById('saveBtn');
+    const nameInput = document.getElementById('name');
+    const loanInput = document.getElementById('loan');
+    const errorMsg = document.getElementById('errorMsg');
+    const loanTableBody = document.getElementById('loanTable').getElementsByTagName('tbody')[0];
+
+    saveButton.addEventListener('click', () => {
+      const name = nameInput.value.trim();
+      const loan = loanInput.value.trim();
+
+      if (name === '' || loan === '') {
+        errorMsg.textContent = 'Please fill in both name and loan amount.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (isNaN(loan) || parseFloat(loan) <= 0) {
+        errorMsg.textContent = 'Loan amount must be a valid positive number.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      const formattedLoan = parseFloat(loan).toLocaleString('en-PH', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+      const newRow = loanTableBody.insertRow();
+      const nameCell = newRow.insertCell(0);
+      const loanCell = newRow.insertCell(1);
+
+      nameCell.textContent = name;
+      loanCell.textContent = "₱" + formattedLoan;
+
+      nameInput.value = '';
+      loanInput.value = '';
+      errorMsg.style.display = 'none';
+    });
+  </script>
+
+</body>
+</html>
